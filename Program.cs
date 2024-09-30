@@ -1,5 +1,7 @@
 
 using baby_shop_backend.Context;
+using baby_shop_backend.Mapper;
+using baby_shop_backend.Services.userServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace baby_shop_backend
@@ -14,7 +16,9 @@ namespace baby_shop_backend
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.AddLogging();
+            builder.Services.AddScoped<IuserServies, UserServies>();
             builder.Services.AddDbContext<DbContext_Main>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
