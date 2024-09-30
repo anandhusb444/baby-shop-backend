@@ -20,5 +20,6 @@ namespace baby_shop_backend.Models.UserModel
         public string Role { get; set; } = "User";
 
 
+
     }
 }
