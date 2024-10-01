@@ -110,7 +110,7 @@ namespace baby_shop_backend.Services.userServices
                     {
                         if (isExist.isStatus == false)
                         {
-                            return "user is bloked";
+                            return "user is blocked";
                         }
                         else
                         {
@@ -158,6 +158,8 @@ namespace baby_shop_backend.Services.userServices
                 {
                     return false;
                 }
+             
+             
                 else
                 {
                     user.isStatus = false;

@@ -120,9 +120,9 @@ namespace baby_shop_backend.Controllers
                 {
                     return BadRequest("Wrong Password");
                 }
-                if (user_Login == "user is bloked")
+                if (user_Login == "user is blocked")
                 {
-                    return StatusCode(404, "Forbiden");
+                    return StatusCode(404, "Forbiden : user is block");
                 }
                 return Ok(new { Token = user_Login });
             }
