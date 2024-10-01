@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace baby_shop_backend.Models.UserModel
 {
@@ -19,6 +20,10 @@ namespace baby_shop_backend.Models.UserModel
         public bool isStatus { get; set; } = true;
         public string Role { get; set; } = "User";
 
+        public virtual Cart cart { get; set; }
+
+        public ICollection<Order> order { get; set; }
+        public ICollection<WhishList> whishLists { get; set; }
 
 
     }
