@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using baby_shop_backend.Context;
 
@@ -10,9 +11,11 @@ using baby_shop_backend.Context;
 namespace baby_shop_backend.Migrations
 {
     [DbContext(typeof(DbContext_Main))]
-    partial class DbContext_MainModelSnapshot : ModelSnapshot
+    [Migration("20240930140055_add-seedAdmin")]
+    partial class addseedAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,11 +59,11 @@ namespace baby_shop_backend.Migrations
                     b.HasData(
                         new
                         {
-                            id = 3,
+                            id = 2,
                             Role = "Admin",
                             isStatus = true,
-                            password = "$2a$11$76fOqJAB8v8tmxvfM6vsC.4y1rgeMkncM.8ZEBG0/e9P8WGy5NNjy",
-                            userEmail = "admin@.com",
+                            password = "$2a$11$qrlAF2dlgqIIomimnR3/S.1Vtx6runLVk/OP8rkSYt/wnR3eURMgO",
+                            userEmail = "admin@gmail",
                             userName = "Admin"
                         });
                 });

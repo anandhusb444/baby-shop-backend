@@ -1,8 +1,10 @@
-
 using baby_shop_backend.Context;
 using baby_shop_backend.Mapper;
 using baby_shop_backend.Services.userServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace baby_shop_backend
 {
@@ -13,13 +15,46 @@ namespace baby_shop_backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            // Add AutoMapper service.
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            // Add logging.
             builder.Services.AddLogging();
+            
+
+            // Add scoped service for user.
             builder.Services.AddScoped<IuserServies, UserServies>();
-            builder.Services.AddDbContext<DbContext_Main>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Configure DbContext with SQL Server.
+            builder.Services.AddDbContext<DbContext_Main>(x =>
+                x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            //--------------------Authentication & Token-----------------------------
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true
+                };
+            });
+
+            // Add authorization
+            builder.Services.AddAuthorization();
+
+            // Add Swagger for API documentation.
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -34,8 +69,10 @@ namespace baby_shop_backend
 
             app.UseHttpsRedirection();
 
+            // Enable authentication and authorization middleware.
+            
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 
