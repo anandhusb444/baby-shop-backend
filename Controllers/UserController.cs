@@ -147,7 +147,7 @@ namespace baby_shop_backend.Controllers
                 }
                 else
                 {
-                    return Ok();
+                    return Ok(user);
                 }
             }
             catch(Exception ex)
@@ -164,7 +164,7 @@ namespace baby_shop_backend.Controllers
         {
             try
             {
-                var user = _user.UnblockUser(Id);
+                var user = await _user.UnblockUser(Id);
 
                 if(user == null)
                 {
@@ -172,7 +172,7 @@ namespace baby_shop_backend.Controllers
                 }
                 else
                 {
-                    return Ok();
+                    return Ok(user);
                 }
             }
             catch(Exception ex)
