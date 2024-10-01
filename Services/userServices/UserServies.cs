@@ -132,9 +132,7 @@ namespace baby_shop_backend.Services.userServices
                                 signingCredentials: credential,
                                 expires: DateTime.Now.AddDays(1));
                             _logger.LogInformation($"Generated Token: {token}");
-                            return new JwtSecurityTokenHandler().WriteToken(token);
-                            
-                            
+                            return new JwtSecurityTokenHandler().WriteToken(token);      
                         }
                     }
                     else
@@ -147,9 +145,44 @@ namespace baby_shop_backend.Services.userServices
             catch (Exception ex)
             {
                 return $"an error Ocuuerd {ex.Message}";
-
             }
 
         }
+
+        public async Task<bool> BlockUser(int Id)
+        {
+            
+                var user = await _context.User.FirstOrDefaultAsync(u => u.id == Id);
+
+                if(user == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    user.isStatus = false;
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            
+        }
+
+        public async Task<bool> UnblockUser(int Id)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.id == Id);
+            
+            if(user == null)
+            {
+                return false;
+            }
+            else
+            {
+                user.isStatus = true;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+        }
     }
+
+   
 }

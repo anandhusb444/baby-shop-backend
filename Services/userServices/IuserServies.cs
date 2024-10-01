@@ -13,6 +13,9 @@ namespace baby_shop_backend.Services.userServices
 
         Task<string> Login(Login login);
 
+        Task<bool> BlockUser(int Id);
+
+        Task<bool> UnblockUser(int Id);
 
 
 

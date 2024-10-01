@@ -25,7 +25,7 @@ namespace baby_shop_backend.Controllers
         }
 
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
 
         public async Task<IActionResult> GetAllUser()
@@ -133,7 +133,52 @@ namespace baby_shop_backend.Controllers
             
 
         }
-        
-        
+        [Authorize(Roles = "Admin")]
+        [HttpPut("block {Id}")]
+        public async Task<IActionResult> blokeUser(int Id)
+        {
+            try
+            {
+                var user = await _user.BlockUser(Id);
+
+                if(user == null)
+                {
+                    return BadRequest("No user found");
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex.Message}");
+            }
+
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("Unblock {Id}")]
+
+        public async Task<IActionResult> Unblock(int Id)
+        {
+            try
+            {
+                var user = _user.UnblockUser(Id);
+
+                if(user == null)
+                {
+                    return BadRequest("user Not Found");
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, $"Internal server Error : {ex.Message}");
+            }
+        }
     }
 }
