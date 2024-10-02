@@ -66,6 +66,10 @@ namespace baby_shop_backend.Context
                 .WithMany(w => w.whishlist)
                 .HasForeignKey(f => f.productId);
 
+            modelBuilder.Entity<Products>()
+                .Property(p => p.price)
+                .HasPrecision(18, 2);
+
             modelBuilder.Entity<Category>()
                 .HasData(new Category { id = 1, CategoriesName = "All" }, new Category { id = 2, CategoriesName = "Toys" }, new Category { id = 3, CategoriesName = "Foods" }, new Category { id = 4, CategoriesName = "Clothing" });
 
