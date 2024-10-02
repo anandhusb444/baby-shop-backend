@@ -20,10 +20,10 @@ namespace baby_shop_backend.Models.UserModel
         public bool isStatus { get; set; } = true;
         public string Role { get; set; } = "User";
 
-        public virtual Cart cart { get; set; }
+        public virtual Cart cart { get; set; }//navigation property
 
-        public ICollection<Order> order { get; set; }
-        public ICollection<WhishList> whishLists { get; set; }
+        public ICollection<Order> order { get; set; }//navigation prop
+        public ICollection<WhishList> whishLists { get; set; }//navtion prop
 
 
     }

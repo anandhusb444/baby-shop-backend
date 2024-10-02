@@ -15,8 +15,8 @@ namespace baby_shop_backend.Models
         [Required]
         public int quantity { get; set;}
 
-        public virtual Cart cart { get; set; }
-        public virtual Products product { get; set; }
+        public virtual Cart cart { get; set; }//navigation prop
+        public virtual Products product { get; set; }//naviagtion prop
 
     }
 }
