@@ -75,6 +75,7 @@ namespace baby_shop_backend.Services.ProductServices
             catch(Exception ex)
             {
                 _loger.LogInformation(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw new Exception(ex.Message);
 
             }

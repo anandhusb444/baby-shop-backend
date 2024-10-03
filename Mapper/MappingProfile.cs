@@ -13,7 +13,7 @@ namespace baby_shop_backend.Mapper
         public MappingProfile()
         {
             CreateMap<UserDTO, User>().ReverseMap();
-            CreateMap<ProductDTO, Products>().ReverseMap();
+            CreateMap<ProductViewDTO, Products>().ReverseMap();
             CreateMap<AddProductDTO, Products>().ReverseMap();
 
         }
