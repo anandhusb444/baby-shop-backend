@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using baby_shop_backend.DTO;
+using baby_shop_backend.DTO.ProductDTO;
+using baby_shop_backend.Models;
 using baby_shop_backend.Models.UserModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -11,6 +13,8 @@ namespace baby_shop_backend.Mapper
         public MappingProfile()
         {
             CreateMap<UserDTO, User>().ReverseMap();
+            CreateMap<ProductDTO, Products>().ReverseMap();
+            CreateMap<AddProductDTO, Products>().ReverseMap();
 
         }
     }

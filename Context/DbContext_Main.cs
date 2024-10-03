@@ -7,6 +7,15 @@ namespace baby_shop_backend.Context
     public class DbContext_Main : DbContext
     {
         public DbSet<User> User { get; set; }
+        public DbSet<Cart> CartTable { get; set; }
+        public DbSet<CartItems> CartItemsTable { get; set; }
+        public DbSet<Category> CategoriesTable { get; set; }
+        public DbSet<Order> OrderTable { get; set; }
+        public DbSet<OrderItems> OrderItemsTable { get; set; }
+        public DbSet<Products> ProductsTable { get; set; }
+        public DbSet<WhishList> WhishListTable { get; set; }
+
+
         
         public DbContext_Main(DbContextOptions options) : base(options)
         {   
@@ -31,7 +40,8 @@ namespace baby_shop_backend.Context
 
             modelBuilder.Entity<Products>()
                 .HasOne(c => c.category)
-                .WithMany(p => p.products);
+                .WithMany(p => p.products)
+                .HasForeignKey(f=>f.categoryId);
 
             modelBuilder.Entity<Order>()
                 .HasOne(u => u.User)

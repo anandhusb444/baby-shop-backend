@@ -1,9 +1,14 @@
 using baby_shop_backend.Context;
 using baby_shop_backend.Mapper;
+using baby_shop_backend.Services.CartServices;
+using baby_shop_backend.Services.JwtServies;
+using baby_shop_backend.Services.ProductServices;
 using baby_shop_backend.Services.userServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace baby_shop_backend
@@ -26,10 +31,44 @@ namespace baby_shop_backend
 
             // Add scoped service for user.
             builder.Services.AddScoped<IuserServies, UserServies>();
+            builder.Services.AddScoped<I_jwtServices, JwtServices>();
+            builder.Services.AddScoped<IproductServices, ProductServices>();
+            //builder.Services.AddScoped<IcartServies, CartServies>();
 
             // Configure DbContext with SQL Server.
             builder.Services.AddDbContext<DbContext_Main>(x =>
                 x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
+                });
+
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+
+
+
+            });
 
             //--------------------Authentication & Token-----------------------------
             builder.Services.AddAuthentication(options =>
@@ -43,8 +82,8 @@ namespace baby_shop_backend
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    //ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using baby_shop_backend.Context;
 
@@ -11,9 +12,11 @@ using baby_shop_backend.Context;
 namespace baby_shop_backend.Migrations
 {
     [DbContext(typeof(DbContext_Main))]
-    partial class DbContext_MainModelSnapshot : ModelSnapshot
+    [Migration("20241003041006_addDbSet")]
+    partial class addDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,6 +82,12 @@ namespace baby_shop_backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("categoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
 
                     b.ToTable("CategoriesTable");
@@ -87,22 +96,30 @@ namespace baby_shop_backend.Migrations
                         new
                         {
                             id = 1,
-                            CategoriesName = "All"
+                            CategoriesName = "All",
+                            categoryId = 0,
+                            quantity = 0
                         },
                         new
                         {
                             id = 2,
-                            CategoriesName = "Toys"
+                            CategoriesName = "Toys",
+                            categoryId = 0,
+                            quantity = 0
                         },
                         new
                         {
                             id = 3,
-                            CategoriesName = "Foods"
+                            CategoriesName = "Foods",
+                            categoryId = 0,
+                            quantity = 0
                         },
                         new
                         {
                             id = 4,
-                            CategoriesName = "Clothing"
+                            CategoriesName = "Clothing",
+                            categoryId = 0,
+                            quantity = 0
                         });
                 });
 
@@ -248,7 +265,7 @@ namespace baby_shop_backend.Migrations
                             id = 3,
                             Role = "Admin",
                             isStatus = true,
-                            password = "$2a$11$sUxEZb8lk/09OqzjNKdo.eN3wLgqSt5RqJRAGjh.xjolC2S3cXAa.",
+                            password = "$2a$11$8je6eV7fZDZtfofdxMSBuOlzFt7XJ5Pxq4DFQE3WcWpIn9Cbf3nwq",
                             userEmail = "admin@.com",
                             userName = "Admin"
                         });

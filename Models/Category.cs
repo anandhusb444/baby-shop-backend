@@ -11,5 +11,7 @@ namespace baby_shop_backend.Models
 
         public ICollection<Products> products { get; set; }
 
+        
+
     }
 }
