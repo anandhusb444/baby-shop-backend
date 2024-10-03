@@ -190,5 +190,45 @@ namespace baby_shop_backend.Services.ProductServices
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<bool> UpdateProduct(int Id, AddProductDTO product, IFormFile image)
+        {
+            try
+            {
+                var isExist = await _context.ProductsTable.FirstOrDefaultAsync(p => p.id == Id);
+                if(isExist != null)
+                {
+                    if (image != null)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.Name);
+                        var filePath = Path.Combine(_webHostEnviroment.WebRootPath, "Image", "Products", fileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                            isExist.image = fileName;
+                        }
+                    }
+
+
+                    isExist.title = product.title;
+                    isExist.description = product.description;
+                    isExist.price = product.price;
+                    isExist.categoryId = product.categoryId;
+                    isExist.quantity = product.quantity;
+
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception ex)
+            {
+                _loger.LogInformation(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

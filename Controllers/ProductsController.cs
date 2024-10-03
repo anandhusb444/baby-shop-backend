@@ -53,7 +53,7 @@ namespace baby_shop_backend.Controllers
         {
             try
             {
-                var product = _productRepo.GetProductByCat(category);
+                var product = await _productRepo.GetProductByCat(category);
                 return Ok(product);
             }
             catch(Exception ex)
@@ -67,7 +67,7 @@ namespace baby_shop_backend.Controllers
         {
             try
             {
-                var product = _productRepo.Search(Name);
+                var product = await _productRepo.Search(Name);
                 return Ok(product);
             }
             catch(Exception ex)
