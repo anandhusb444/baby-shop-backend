@@ -22,18 +22,18 @@ namespace baby_shop_backend
             // Add services to the container.
             builder.Services.AddControllers();
 
-            // Add AutoMapper service.
+            
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-            // Add logging.
+
             builder.Services.AddLogging();
             
 
-            // Add scoped service for user.
+            
             builder.Services.AddScoped<IuserServies, UserServies>();
             builder.Services.AddScoped<I_jwtServices, JwtServices>();
             builder.Services.AddScoped<IproductServices, ProductServices>();
-            //builder.Services.AddScoped<IcartServies, CartServies>();
+            builder.Services.AddScoped<IcartServies, CartServies>();
 
             // Configure DbContext with SQL Server.
             builder.Services.AddDbContext<DbContext_Main>(x =>

@@ -16,5 +16,7 @@ namespace baby_shop_backend.Services.ProductServices
 
         Task<bool> UpdateProduct(int Id, AddProductDTO product, IFormFile image);
 
+        Task<bool> DeleteProduct(int Id);
+
     }
 }

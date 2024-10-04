@@ -1,22 +1,25 @@
 ﻿using baby_shop_backend.Context;
 using baby_shop_backend.DTO.CartDTO;
+using baby_shop_backend.Models;
 using baby_shop_backend.Services.JwtServies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace baby_shop_backend.Services.CartServices
 {
-    public class CartServies //: IcartServies 
+    public class CartServies : IcartServies 
     {
         private DbContext_Main _context;
         private readonly I_jwtServices _jwtServices;
         private IConfiguration _configuration;
+        //private ILogger _logger;
 
         public CartServies(I_jwtServices jwtSer, IConfiguration config, DbContext_Main conxt)
         {
             _context = conxt;
             _jwtServices = jwtSer;
             _configuration = config;
+            //_logger = log;
         }
 
         public async Task<List<OutCartDTO>> GetAllProducts(string token)
@@ -39,16 +42,16 @@ namespace baby_shop_backend.Services.CartServices
                 {
                     return new List<OutCartDTO>();
                 }
-                var items = user.cart.cartItems.Select(itm => new OutCartDTO 
-                { 
+                var items = user.cart.cartItems.Select(itm => new OutCartDTO
+                {
                     id = itm.productId,
                     title = itm.product.title,
                     description = itm.product.description,
-                    //--------img------------
+                    image = $"{_configuration["HostUrl:image"]}/Products/{itm.product.image}",
                     price = itm.product.price * itm.quantity,
                     quantity = itm.quantity,
                     total = itm.quantity * itm.product.price
-                
+
                 }).ToList();
 
                 return items;
@@ -62,5 +65,62 @@ namespace baby_shop_backend.Services.CartServices
             }
             
         }
+
+        public async Task<bool> AddToCart(string token, int productId)
+        {
+            try
+            {
+                var userId = _jwtServices.GetUserId(token);
+
+                var user = await _context.User.Include(c => c.cart)
+                    .ThenInclude(c => c.cartItems)
+                    .ThenInclude(c => c.product).FirstOrDefaultAsync(us => us.id == userId);
+
+                if(user == null)
+                {
+                    return false;
+                }
+
+                var product = await _context.ProductsTable.FirstOrDefaultAsync(p => p.id == productId);
+                if(product == null)
+                {
+                    return false;
+                }
+
+                if(user.cart == null)
+                {
+                    user.cart = new Cart { UserId = user.id, cartItems = new List<CartItems>() };
+                    _context.CartTable.Add(user.cart);
+                }
+
+                var checkIsProduct = user.cart.cartItems.FirstOrDefault(v => v.productId == productId);
+                if(checkIsProduct != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var cartItem = new CartItems 
+                    {
+                        cartId = user.cart.id,
+                        productId = productId,
+                        quantity = 1
+                    };
+                    user.cart.cartItems.Add(cartItem);
+                    await _context.SaveChangesAsync();
+                    return true;
+
+                }
+            }
+            catch(Exception ex) 
+            {
+                // _logger.LogError(ex, ex.InnerException?.Message ?? ex.Message);
+                //throw;
+                Console.WriteLine($"There is some error in the AddCart  {ex.Message}");
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> RemoveCart
     }
 }

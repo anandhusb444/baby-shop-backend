@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using baby_shop_backend.Context;
 using baby_shop_backend.DTO.CategoryDTO;
 using baby_shop_backend.DTO.ProductDTO;
@@ -198,14 +199,16 @@ namespace baby_shop_backend.Services.ProductServices
                 var isExist = await _context.ProductsTable.FirstOrDefaultAsync(p => p.id == Id);
                 if(isExist != null)
                 {
+                    string prodImg = null;
+
                     if (image != null)
                     {
-                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.Name);
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
                         var filePath = Path.Combine(_webHostEnviroment.WebRootPath, "Image", "Products", fileName);
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await image.CopyToAsync(stream);
-                            isExist.image = fileName;
+                            prodImg = fileName;
                         }
                     }
 
@@ -215,7 +218,32 @@ namespace baby_shop_backend.Services.ProductServices
                     isExist.price = product.price;
                     isExist.categoryId = product.categoryId;
                     isExist.quantity = product.quantity;
+                    isExist.image = prodImg;
 
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception ex)
+            {
+                _loger.LogInformation(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> DeleteProduct(int Id)
+        {
+            try
+            {
+                var product = await _context.ProductsTable.FirstOrDefaultAsync(p => p.id == Id);
+
+                if(product != null)
+                {
+                    _context.ProductsTable.Remove(product);
                     await _context.SaveChangesAsync();
                     return true;
                 }
