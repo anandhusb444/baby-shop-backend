@@ -90,7 +90,27 @@ namespace baby_shop_backend.Controllers
             }
             else
             {
-                return Ok("Added");
+                return Ok("increaseQty");
+            }
+        }
+
+        [HttpPut("DecreaseQty")]
+        [Authorize]
+
+        public async Task<IActionResult> DecreaseQty(int productId)
+        {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault().Split();
+            var jwt = token[1];
+
+            var result = await _cartRepo.DecreaseQty(jwt, productId);
+
+            if(result == null)
+            {
+                return BadRequest("item not found");
+            }
+            else
+            {
+                return Ok("DecreaseQty");
             }
         }
 

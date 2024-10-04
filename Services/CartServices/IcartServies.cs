@@ -12,7 +12,7 @@ namespace baby_shop_backend.Services.CartServices
 
         Task<bool> IncreaseQty(string token, int productId);
 
-        //Task<bool> DecreaseQty(string token, int productId);
+        Task<bool> DecreaseQty(string token, int productId);
 
     }
 }
