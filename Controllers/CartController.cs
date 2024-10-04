@@ -53,5 +53,26 @@ namespace baby_shop_backend.Controllers
             }
         }
 
+        [HttpDelete("RemoveFromCart")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int ProductId)
+        {
+            
+                var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault().Split();
+                var jwt = token[1];
+
+                var result = await _cartRepo.RemoveCart(jwt, ProductId);
+                if(result == false)
+                {
+                    return BadRequest("Item not found");
+                }
+                else
+                {
+                    return Ok("Removed from the cart");
+
+                }
+
+        }
+
     }
 }

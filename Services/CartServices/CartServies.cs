@@ -146,7 +146,7 @@ namespace baby_shop_backend.Services.CartServices
                 else
                 {
                     user.cart.cartItems.Remove(deleteProduct);
-                    _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                     return true;
                 }
 
