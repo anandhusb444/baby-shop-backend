@@ -156,5 +156,39 @@ namespace baby_shop_backend.Services.CartServices
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<bool> IncreaseQty(string token,int productId)
+        {
+            try
+            {
+                var userId = _jwtServices.GetUserId(token);
+
+                var user = await _context.User.Include(u => u.cart)
+                    .ThenInclude(ci => ci.cartItems).ThenInclude(p => p.product).FirstOrDefaultAsync(u => u.id == userId);
+
+                if (user == null)
+                {
+                    throw new Exception("User Not Found");
+                }
+
+                var item = user.cart.cartItems.FirstOrDefault(p => p.productId == productId);
+
+                if(item == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    item.quantity += 1;
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+  
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

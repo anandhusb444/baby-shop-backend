@@ -74,5 +74,25 @@ namespace baby_shop_backend.Controllers
 
         }
 
+        [HttpPut("increaseQty")]
+        [Authorize]
+
+        public async Task<IActionResult> Increase(int ProductId)
+        {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault().Split();
+            var jwt = token[1];
+
+            var result = await _cartRepo.IncreaseQty(jwt, ProductId);
+
+            if(result == null)
+            {
+                return BadRequest("Item Not Found");
+            }
+            else
+            {
+                return Ok("Added");
+            }
+        }
+
     }
 }
