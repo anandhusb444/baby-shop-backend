@@ -4,6 +4,7 @@ using baby_shop_backend.Models;
 using baby_shop_backend.Services.JwtServies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace baby_shop_backend.Services.CartServices
 {
@@ -121,6 +122,39 @@ namespace baby_shop_backend.Services.CartServices
             }
         }
 
-        public async Task<bool> RemoveCart
+        public async Task<bool> RemoveCart(string token, int productId)
+        {
+            try
+            {
+                var userID = _jwtServices.GetUserId(token);
+
+                var user = await _context.User.Include(u => u.cart)
+                    .ThenInclude(ci => ci.cartItems)
+                    .ThenInclude(p => p.product).FirstOrDefaultAsync(p => p.id == userID);
+
+                if(user == null)
+                {
+                    throw new Exception("user not found");
+                }
+
+                var deleteProduct = user.cart.cartItems.FirstOrDefault(p => p.productId == productId);
+
+                if(deleteProduct == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    user.cart.cartItems.Remove(deleteProduct);
+                    _context.SaveChangesAsync();
+                    return true;
+                }
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
