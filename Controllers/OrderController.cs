@@ -45,5 +45,27 @@ namespace baby_shop_backend.Controllers
             
         }
 
+        [HttpGet("GetOrder")]
+        [Authorize]
+        public async Task<IActionResult> GetOrder()
+        {
+            try
+            {
+                var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault().Split();
+                var jwt = token[1];
+
+                var details = await _ordetRepo.GetOrders(jwt);
+
+                return Ok(details);
+
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
