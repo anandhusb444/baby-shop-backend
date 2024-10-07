@@ -2,6 +2,7 @@ using baby_shop_backend.Context;
 using baby_shop_backend.Mapper;
 using baby_shop_backend.Services.CartServices;
 using baby_shop_backend.Services.JwtServies;
+using baby_shop_backend.Services.OrderServices;
 using baby_shop_backend.Services.ProductServices;
 using baby_shop_backend.Services.userServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,6 +35,7 @@ namespace baby_shop_backend
             builder.Services.AddScoped<I_jwtServices, JwtServices>();
             builder.Services.AddScoped<IproductServices, ProductServices>();
             builder.Services.AddScoped<IcartServies, CartServies>();
+            builder.Services.AddScoped<IorderServices, OrderServices>();
 
             // Configure DbContext with SQL Server.
             builder.Services.AddDbContext<DbContext_Main>(x =>

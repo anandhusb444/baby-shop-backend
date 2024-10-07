@@ -2,6 +2,6 @@
 {
     public interface I_jwtServices
     {
-        int GetUserId(string token);
+       int GetUserId(string token);
     }
 }

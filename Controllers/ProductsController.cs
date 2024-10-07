@@ -103,12 +103,12 @@ namespace baby_shop_backend.Controllers
         [HttpPut("UpdateProduct{Id}")]
         [Authorize (Roles = "Admin")]
 
-        public async Task<IActionResult> Update([FromForm]int Id, AddProductDTO product, IFormFile image)
+        public async Task<IActionResult> Update(int Id, [FromForm] AddProductDTO product,IFormFile image)
         {
             try
             {
                 var prod = await _productRepo.UpdateProduct(Id, product,image);
-                if(prod != null)
+                if(prod)
                 {
                     return Ok("Updated SuccessFuly");
                 }

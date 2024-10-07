@@ -35,15 +35,17 @@ namespace baby_shop_backend.Services.ProductServices
 
                 if (product.Any())
                 {
-                    var products = product.Select(p => new ProductViewDTO 
-                    { 
+                    var products = product.Select(p => new ProductViewDTO
+                    {
                         id = p.id,
                         title = p.title,
                         description = p.description,
                         image = $"{_configuratoin["HostUrl:image"]}/Products/{p.image}",
                         category = p.category.CategoriesName,
-                        price = p.price
-                    
+                        price = p.price,
+                        quantity = p.quantity
+
+
                     }).ToList();
                     return products;
 
@@ -199,7 +201,7 @@ namespace baby_shop_backend.Services.ProductServices
                 var isExist = await _context.ProductsTable.FirstOrDefaultAsync(p => p.id == Id);
                 if(isExist != null)
                 {
-                    string prodImg = null;
+                    string prodImg = isExist.image;
 
                     if (image != null)
                     {
@@ -218,7 +220,7 @@ namespace baby_shop_backend.Services.ProductServices
                     isExist.price = product.price;
                     isExist.categoryId = product.categoryId;
                     isExist.quantity = product.quantity;
-                    isExist.image = prodImg;
+                    isExist.image =   prodImg;
 
                     await _context.SaveChangesAsync();
                     return true;
