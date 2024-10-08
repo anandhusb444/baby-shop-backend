@@ -67,5 +67,37 @@ namespace baby_shop_backend.Controllers
             }
         }
 
+        [HttpGet("UserOrder")]
+        [Authorize (Roles = "Admin")]
+
+        public async Task<IActionResult> GetOrderAdmin(int Id)
+        {
+            try
+            {
+                var result = await _ordetRepo.GetOdersAdmin(Id);
+                if (result == null)
+                {
+                    //Console.WriteLine("No user Found");
+                    return NotFound("No order found for this users: ");
+                }
+
+                return Ok(result);
+
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, $"An internal Sever error occirred:{ex.Message}");
+            }
+            
+
+            
+          
+        } 
+
     }
 }

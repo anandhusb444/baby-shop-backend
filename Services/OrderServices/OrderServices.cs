@@ -104,18 +104,18 @@ namespace baby_shop_backend.Services.OrderServices
         {
             try
             {
-                var user = _context.User.FirstOrDefaultAsync(us => us.id == Id);
+                var user = await _context.User.FirstOrDefaultAsync(us => us.id == Id);
 
                 if(user == null)
                 {
-                    throw new Exception("user not found");
+                    throw new KeyNotFoundException("user not found");
                 }
 
                 var orders = await _context.OrderTable.Include(oi => oi.orderItems)
                         .ThenInclude(p => p.products)
                         .Where(u => u.UserId == Id).ToListAsync();
 
-                if(orders == null)
+                if(!orders.Any())
                 {
                     return new List<OutOrderDTO>();
                 }
@@ -126,14 +126,18 @@ namespace baby_shop_backend.Services.OrderServices
                 {
                     foreach(var item in order.orderItems)
                     {
-                        details.Add(new OutOrderDTO
+                        if(!details.Any(d => d.id == item.id))
                         {
-                            id = item.id,
-                            productId = item.productId,
-                            productName = item.productName,
-                            quantity = item.quantity,
-                            total = item.price * item.quantity,
-                        });
+                            details.Add(new OutOrderDTO
+                            {
+                                id = item.id,
+                                productId = item.productId,
+                                productName = item.productName,
+                                quantity = item.quantity,
+                                total = item.price * item.quantity,
+                            });
+                        }
+                        
                     }
                 }
                 return details;
