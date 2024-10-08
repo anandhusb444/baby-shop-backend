@@ -8,5 +8,7 @@ namespace baby_shop_backend.Services.OrderServices
 
         Task<List<OutOrderDTO>> GetOrders (string token);
 
+        Task<List<OutOrderDTO>> GetOdersAdmin(int Id);
+
     }
 }

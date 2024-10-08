@@ -99,5 +99,49 @@ namespace baby_shop_backend.Services.OrderServices
             }
 
         }
+
+        public async Task<List<OutOrderDTO>> GetOdersAdmin(int Id)
+        {
+            try
+            {
+                var user = _context.User.FirstOrDefaultAsync(us => us.id == Id);
+
+                if(user == null)
+                {
+                    throw new Exception("user not found");
+                }
+
+                var orders = await _context.OrderTable.Include(oi => oi.orderItems)
+                        .ThenInclude(p => p.products)
+                        .Where(u => u.UserId == Id).ToListAsync();
+
+                if(orders == null)
+                {
+                    return new List<OutOrderDTO>();
+                }
+
+                var details = new List<OutOrderDTO>();
+
+                foreach(var order in orders)
+                {
+                    foreach(var item in order.orderItems)
+                    {
+                        details.Add(new OutOrderDTO
+                        {
+                            id = item.id,
+                            productId = item.productId,
+                            productName = item.productName,
+                            quantity = item.quantity,
+                            total = item.price * item.quantity,
+                        });
+                    }
+                }
+                return details;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
