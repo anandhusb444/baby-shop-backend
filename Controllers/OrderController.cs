@@ -93,11 +93,38 @@ namespace baby_shop_backend.Controllers
             {
                 return StatusCode(500, $"An internal Sever error occirred:{ex.Message}");
             }
-            
+        }
 
-            
-          
-        } 
+        [HttpGet("Total Revenue")]
+        [Authorize (Roles = "Admin")]
 
+        public async Task<IActionResult> GetRevenue()
+        {
+            try
+            {
+                var result = await _ordetRepo.TotalRevenue();
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("Sales")]
+        [Authorize (Roles = "Admin")]
+
+        public async Task<IActionResult> GetSales()
+        {
+            try
+            {
+                var result = await _ordetRepo.TotalPurchase();
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

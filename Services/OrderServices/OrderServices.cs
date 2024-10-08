@@ -4,6 +4,7 @@ using baby_shop_backend.Models;
 using baby_shop_backend.Services.JwtServies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Reflection.Metadata.Ecma335;
 
 namespace baby_shop_backend.Services.OrderServices
 {
@@ -141,6 +142,32 @@ namespace baby_shop_backend.Services.OrderServices
                     }
                 }
                 return details;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<decimal> TotalRevenue()
+        {
+            try
+            {
+                var result = await _context.OrderItemsTable.SumAsync(p => p.price * p.quantity);
+                return result;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<int> TotalPurchase()
+        {
+            try
+            {
+                var result = await _context.OrderItemsTable.SumAsync(u => u.quantity);
+                return result;
             }
             catch(Exception ex)
             {

@@ -10,5 +10,9 @@ namespace baby_shop_backend.Services.OrderServices
 
         Task<List<OutOrderDTO>> GetOdersAdmin(int Id);
 
+        Task<decimal> TotalRevenue();
+
+        Task<int> TotalPurchase();
+
     }
 }
