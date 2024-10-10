@@ -113,6 +113,7 @@ namespace baby_shop_backend.Services.WhisListServices
                         price = u.Products.price,
                         category = u.Products.category.CategoriesName,
                         image = u.Products.image,
+                        title = u.Products.title
                     }).ToList();
 
                     return whishView;

@@ -18,14 +18,7 @@ namespace baby_shop_backend.Middleware
         public async Task Invoke(HttpContext context)
         {
             var authorizationHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-            //var key = token[1];
-
-            //if(token != null)
-            //{
-            //    AttachUserContext(context, key);
-            //}
-
-            //await _next(context);
+           
 
             if (string.IsNullOrEmpty(authorizationHeader))
             {
@@ -35,16 +28,14 @@ namespace baby_shop_backend.Middleware
 
             var tokenParts = authorizationHeader.Split(' ');
 
-            if(tokenParts.Length !=2 || tokenParts[0] != "Bearer")
+            if (tokenParts.Length != 2 || tokenParts[0] != "Bearer")
             {
                 await _next(context);
                 return;
             }
 
             var token = tokenParts[1];
-
             AttachUserContext(context, token);
-
             await _next(context);
         }
 
