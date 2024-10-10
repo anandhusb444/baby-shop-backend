@@ -180,5 +180,27 @@ namespace baby_shop_backend.Controllers
                 return StatusCode(500, $"Internal server Error : {ex.Message}");
             }
         }
+
+        [HttpDelete("DeleteUser")]
+        public async Task<IActionResult> DeleteUser(int Id)
+        {
+            try
+            {
+                var result = await _user.DeleteUser(Id);
+
+                if (result)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest("Can DeleteUser");
+                }
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(400, ex.Message);
+            }
+        }
     }
 }

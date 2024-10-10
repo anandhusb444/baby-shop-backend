@@ -17,6 +17,8 @@ namespace baby_shop_backend.Services.userServices
 
         Task<bool> UnblockUser(int Id);
 
+        Task<bool> DeleteUser(int Id);
+
 
 
     }
