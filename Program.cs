@@ -1,5 +1,6 @@
 using baby_shop_backend.Context;
 using baby_shop_backend.Mapper;
+using baby_shop_backend.Middleware;
 using baby_shop_backend.Services.CartServices;
 using baby_shop_backend.Services.JwtServies;
 using baby_shop_backend.Services.OrderServices;
@@ -24,6 +25,7 @@ namespace baby_shop_backend
             // Add services to the container.
             builder.Services.AddControllers();
 
+            
             
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -117,6 +119,10 @@ namespace baby_shop_backend
             
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //add custom middle ware
+
+            app.UseMiddleware<JwtMiddleWare>();
 
             app.MapControllers();
 

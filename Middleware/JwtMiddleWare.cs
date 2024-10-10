@@ -15,14 +15,35 @@ namespace baby_shop_backend.Middleware
             _secret = config["Jwt:Key"];
         }
 
-        public async Task Invoke(HttpContext context, RequestDelegate next)
+        public async Task Invoke(HttpContext context)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault().Split();
+            var authorizationHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+            //var key = token[1];
 
-            if(token != null)
+            //if(token != null)
+            //{
+            //    AttachUserContext(context, key);
+            //}
+
+            //await _next(context);
+
+            if (string.IsNullOrEmpty(authorizationHeader))
             {
-                AttachUserContext(context, token);
+                await _next(context);
+                return;
             }
+
+            var tokenParts = authorizationHeader.Split(' ');
+
+            if(tokenParts.Length !=2 || tokenParts[0] != "Bearer")
+            {
+                await _next(context);
+                return;
+            }
+
+            var token = tokenParts[1];
+
+            AttachUserContext(context, token);
 
             await _next(context);
         }
@@ -37,7 +58,10 @@ namespace baby_shop_backend.Middleware
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateLifetime = true
+                    ValidateLifetime = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                    
                     
                 },out SecurityToken validatedToken);
 
@@ -46,9 +70,19 @@ namespace baby_shop_backend.Middleware
                 context.Items["User"] = jwtToken;
                     
             }
+            catch(SecurityTokenExpiredException)
+            {
+                //Console.WriteLine(ex.Message);
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.WriteAsync("Token expired.");
+                return;
+            }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.WriteAsync("Token validation failed.");
+                return;
             }
         }
     }
