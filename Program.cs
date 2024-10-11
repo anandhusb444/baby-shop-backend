@@ -97,6 +97,20 @@ namespace baby_shop_backend
                 };
             });
 
+
+            builder.Services.AddCors(option =>
+            {
+                option.AddPolicy("ReactPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
+
+
+
+
             // Add authorization
             builder.Services.AddAuthorization();
 
