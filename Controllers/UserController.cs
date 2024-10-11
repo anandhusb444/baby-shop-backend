@@ -124,7 +124,7 @@ namespace baby_shop_backend.Controllers
                 {
                     return StatusCode(404, "Forbiden : user is block");
                 }
-                return Ok(new { Token = user_Login });
+                return Ok( user_Login );
             }
             catch(Exception ex)
             {
