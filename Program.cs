@@ -127,6 +127,7 @@ namespace baby_shop_backend
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("ReactPolicy");
             app.UseHttpsRedirection();
 
             // Enable authentication and authorization middleware.
