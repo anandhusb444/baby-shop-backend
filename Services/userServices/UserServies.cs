@@ -74,7 +74,7 @@ namespace baby_shop_backend.Services.userServices
         {
             try
             {
-                var isUserExist = await _context.User.FirstOrDefaultAsync(u => u.userEmail == userdto.userEmail);
+                var isUserExist = await _context.User.FirstOrDefaultAsync(u => u.userEmail == userdto.userEmail );
                 if (isUserExist == null)
                 {
                     var salt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -86,7 +86,8 @@ namespace baby_shop_backend.Services.userServices
                 }
                 else
                 {
-                    return false;
+                    return false;   
+
                 }
             }
             catch(Exception ex)

@@ -88,13 +88,15 @@ namespace baby_shop_backend.Controllers
             try
             {
                 var user = await _user.User_Register(userdto);
-                if(user == null)
+                if(user)
                 {
-                    return BadRequest("Please Login");
+                    return Ok("Sucessfully Registerd");
+
                 }
                 else
                 {
-                    return Ok("Sucessfully Registerd");
+                    return BadRequest("user already existed");
+
                 }
 
             }
