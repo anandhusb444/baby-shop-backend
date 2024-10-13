@@ -159,6 +159,9 @@ namespace baby_shop_backend.Services.ProductServices
                 var isExist = await _context.ProductsTable.FirstOrDefaultAsync(p => p.title == addproduct.title);
                 if(isExist != null)
                 {
+                    isExist.quantity += addproduct.quantity;
+                    _context.ProductsTable.Update(isExist);
+                    await _context.SaveChangesAsync();
                     return false;
                 }
 
