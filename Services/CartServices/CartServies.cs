@@ -88,6 +88,11 @@ namespace baby_shop_backend.Services.CartServices
                     return false;
                 }
 
+                if(product.quantity <= 0 )
+                {
+                    return false;
+                }
+
                 if(user.cart == null)
                 {
                     user.cart = new Cart { UserId = user.id, cartItems = new List<CartItems>() };
@@ -95,6 +100,8 @@ namespace baby_shop_backend.Services.CartServices
                 }
 
                 var checkIsProduct = user.cart.cartItems.FirstOrDefault(v => v.productId == productId);
+
+
                 if(checkIsProduct != null)
                 {
                     return false;
@@ -107,6 +114,8 @@ namespace baby_shop_backend.Services.CartServices
                         productId = productId,
                         quantity = 1
                     };
+
+                    product.quantity -= 1;
                     user.cart.cartItems.Add(cartItem);
                     await _context.SaveChangesAsync();
                     return true;
@@ -146,6 +155,14 @@ namespace baby_shop_backend.Services.CartServices
                 else
                 {
                     user.cart.cartItems.Remove(deleteProduct);
+
+                    var increseProduct = await _context.ProductsTable.FirstOrDefaultAsync(u => u.id == productId);
+
+                    if(increseProduct != null)
+                    {
+                        increseProduct.quantity += 1;
+                    }
+
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -177,12 +194,26 @@ namespace baby_shop_backend.Services.CartServices
                 {
                     return false;
                 }
-                else
+
+                else if(item.quantity >= 1)
                 {
                     item.quantity += 1;
+                    var product = _context.ProductsTable.FirstOrDefault(u => u.id == productId);
+                    if(product != null)
+                    {
+                        product.quantity -= 1;
+                    }
                     await _context.SaveChangesAsync();
                     return true;
                 }
+
+                return false;
+                //else
+                //{
+                //    item.quantity += 1;
+                //    await _context.SaveChangesAsync();
+                //    return true;
+                //}
   
             }
             catch(Exception ex)
@@ -207,13 +238,18 @@ namespace baby_shop_backend.Services.CartServices
 
                 var item = user.cart.cartItems.FirstOrDefault(p => p.productId == productId);
 
-                if (item == null)
+                if (item.quantity <= 1)
                 {
                     return false;
                 }
                 else
                 {
                     item.quantity -= 1;
+                    var product = _context.ProductsTable.FirstOrDefault(u => u.id == productId);
+                    if(product != null)
+                    {
+                        product.quantity += 1;
+                    }
                     await _context.SaveChangesAsync();
                     return true;
                 }

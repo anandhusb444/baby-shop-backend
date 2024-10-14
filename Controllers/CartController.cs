@@ -84,13 +84,15 @@ namespace baby_shop_backend.Controllers
 
             var result = await _cartRepo.IncreaseQty(jwt, ProductId);
 
-            if(result == null)
+            if(result)
             {
-                return BadRequest("Item Not Found");
+                return Ok("increaseQty");
+
             }
             else
             {
-                return Ok("increaseQty");
+                return BadRequest("Item Not Found");
+
             }
         }
 

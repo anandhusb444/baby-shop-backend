@@ -162,7 +162,7 @@ namespace baby_shop_backend.Services.ProductServices
                     isExist.quantity += addproduct.quantity;
                     _context.ProductsTable.Update(isExist);
                     await _context.SaveChangesAsync();
-                    return false;
+                    return true;
                 }
 
                 var isCategory = _context.CategoriesTable.AnyAsync(c => c.id == addproduct.categoryId);
