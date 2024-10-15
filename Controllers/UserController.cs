@@ -1,5 +1,6 @@
 ﻿using baby_shop_backend.DTO;
 using baby_shop_backend.Models.UserModel;
+using baby_shop_backend.Respones;
 using baby_shop_backend.Services.userServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -37,20 +38,21 @@ namespace baby_shop_backend.Controllers
                 var user = await _user.GetAllUsers();
                 if(user == null || !user.Any())
                 {
-                    return NotFound("User Not Found");
+
                     _logger.LogInformation($"{user}");
+                    return NotFound(new GenericApiRespones<object>(400, "User Not found", null));
                 }
                 else
                 {
                     _logger.LogInformation($"Found {user.Count()} users.");
-                    return Ok(user);
+                    return Ok(new GenericApiRespones<object>(200, "Ok", user));
                 }
             }
             catch(Exception ex)
             {
                 _logger.LogInformation($"There is a error generated in the GetAlluser");
-                Console.WriteLine($"There is a error in the GetAllUsers function : {ex.Message}");
-                return BadRequest();
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500, respones);
 
             }
 
@@ -67,17 +69,18 @@ namespace baby_shop_backend.Controllers
                 if(user != null)
                 {
                     _logger.LogInformation($"{user}");
-                    return Ok(user);
+                    return Ok(new GenericApiRespones<object>(200, "Ok", user));
                 }
                 else
                 {
-                    return NotFound("User not found");
+                    return NotFound(new GenericApiRespones<object>(400, "User not found", null));
                 }
 
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"internal Server Error : {ex.Message}");
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500, respones);
 
             }
         }
@@ -90,19 +93,20 @@ namespace baby_shop_backend.Controllers
                 var user = await _user.User_Register(userdto);
                 if(user)
                 {
-                    return Ok("Sucessfully Registerd");
+                    return Ok(new GenericApiRespones<object>(200, "Sucessfully Registerd", user));
 
                 }
                 else
                 {
-                    return BadRequest("user already existed");
+                    return BadRequest(new GenericApiRespones<object>(400, "User already existed",null));
 
                 }
 
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"internal Server Error : {ex.Message}");
+                var res = new GenericApiRespones<object>(500, "Internal Server error", null, ex.Message);
+                return StatusCode(500, res);
 
             }
         }
@@ -116,21 +120,24 @@ namespace baby_shop_backend.Controllers
 
                 if (user_Login == "Not Found")
                 {
-                    return BadRequest("Please Sign Up");
+                    return BadRequest(new GenericApiRespones<object>(400, "Please Sign Up", null));
                 }
                 if (user_Login == "Wrong Password")
                 {
-                    return BadRequest("Wrong Password");
+                    return BadRequest(new GenericApiRespones<object>(400, "Wrong Password", null));
+                    
                 }
                 if (user_Login == "user is blocked")
                 {
-                    return StatusCode(404, "Forbiden : user is block");
+                    return BadRequest(new GenericApiRespones<object>(404, "Forbiden user", null));
                 }
-                return Ok( user_Login );
+                return Ok(new GenericApiRespones<object>(200,"user logined Succesfuly", user_Login ));
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"internal server error :{ex.Message}");
+
+                var respones = new GenericApiRespones<object>(500, "Internal Server error", null, ex.Message);
+                return StatusCode(500,respones);
             }
             
 
@@ -145,16 +152,17 @@ namespace baby_shop_backend.Controllers
 
                 if(user == null)
                 {
-                    return BadRequest("No user found");
+                    return BadRequest(new GenericApiRespones<object>(400, "No user found",null));
                 }
                 else
                 {
-                    return Ok(user);
+                    return Ok(new GenericApiRespones<object>(200,"user blocked",user));
                 }
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"Internal server error : {ex.Message}");
+                var respones = new GenericApiRespones<object>(500, "internal server error", null, ex.Message);
+                return StatusCode(500,respones);
             }
 
         }
@@ -170,16 +178,17 @@ namespace baby_shop_backend.Controllers
 
                 if(user == null)
                 {
-                    return BadRequest("user Not Found");
+                    return BadRequest(new GenericApiRespones<object>(400, "user Not Found", null));
                 }
                 else
                 {
-                    return Ok(user);
+                    return Ok(new GenericApiRespones<object>(200,"user Unblocked",user));
                 }
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"Internal server Error : {ex.Message}");
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500,respones);
             }
         }
 
@@ -192,16 +201,17 @@ namespace baby_shop_backend.Controllers
 
                 if (result)
                 {
-                    return Ok(result);
+                    return Ok(new GenericApiRespones<object>(200,"user as been deleted",result));
                 }
                 else
                 {
-                    return BadRequest("Can DeleteUser");
+                    return BadRequest(new GenericApiRespones<object>(400,"can delete user",null));
                 }
             }
             catch(Exception ex)
             {
-                return StatusCode(400, ex.Message);
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(400, respones);
             }
         }
     }

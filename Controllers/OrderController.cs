@@ -1,4 +1,5 @@
 ﻿using baby_shop_backend.DTO.OrderDTO;
+using baby_shop_backend.Respones;
 using baby_shop_backend.Services.OrderServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,17 +31,19 @@ namespace baby_shop_backend.Controllers
                 var result = await _ordetRepo.OrderCreated(jwt, orderdto);
                 if (result)
                 {
-                    return Ok("Order Placed");
+                    return Ok(new GenericApiRespones<object>(200, "Order Placed", result));
+
                 }
                 else
                 {
-                    return Ok("No such Items in the cart");
+                    return BadRequest(new GenericApiRespones<object>(400, "No such Items in the Cart",result));
                 }
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500, respones);
+                
             }
             
         }
@@ -56,14 +59,13 @@ namespace baby_shop_backend.Controllers
 
                 var details = await _ordetRepo.GetOrders(jwt);
 
-                return Ok(details);
-
-
+                return Ok(new GenericApiRespones<object>(200, "Ok", details));
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
+                var response = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                //Console.WriteLine(ex.Message);
+                return StatusCode(500, response);
             }
         }
 
@@ -78,20 +80,22 @@ namespace baby_shop_backend.Controllers
                 if (result == null)
                 {
                     //Console.WriteLine("No user Found");
-                    return NotFound("No order found for this users: ");
+                    return NotFound( new GenericApiRespones<object>(400, "No order found for this users",result));
                 }
 
-                return Ok(result);
+                return Ok(new GenericApiRespones<object>(200,"Ok",result));
 
             }
             catch(KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+              
+                return NotFound(new GenericApiRespones<object>(400,"internal server error",null,ex.Message));
 
             }
             catch(Exception ex)
             {
-                return StatusCode(500, $"An internal Sever error occirred:{ex.Message}");
+                var respones = new GenericApiRespones<object>(500, "Internal Server error", null, ex.Message);
+                return StatusCode(500,respones);
             }
         }
 
@@ -103,11 +107,12 @@ namespace baby_shop_backend.Controllers
             try
             {
                 var result = await _ordetRepo.TotalRevenue();
-                return Ok(result);
+                return Ok(new GenericApiRespones<object>(200, "Ok", result));
             }
             catch(Exception ex)
             {
-                return NotFound(ex.Message);
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500, respones);   
             }
         }
 
@@ -119,11 +124,12 @@ namespace baby_shop_backend.Controllers
             try
             {
                 var result = await _ordetRepo.TotalPurchase();
-                return Ok(result);
+                return Ok(new GenericApiRespones<object>(200, "Ok", result));
             }
             catch(Exception ex)
             {
-                return NotFound(ex.Message);
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500, respones);
             }
         }
     }

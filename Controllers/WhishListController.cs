@@ -1,4 +1,5 @@
-﻿using baby_shop_backend.Services.WhisListServices;
+﻿using baby_shop_backend.Respones;
+using baby_shop_backend.Services.WhisListServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,13 +29,14 @@ namespace baby_shop_backend.Controllers
                 var result = await _iwhishListRepo.AddToWhishList(jwt, productId);
                 if (!result)
                 {
-                    return BadRequest("Item already in the WhishList");
+                    return BadRequest(new GenericApiRespones<object>(400, "Item already in the WhishList", null));
                 }
-                return Ok(result);
+                return Ok(new GenericApiRespones<object>(200,"Ok",result));
             }
             catch(Exception ex)
             {
-                return NotFound(ex.Message);
+                var response = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500,response);
             }
         }
 
@@ -48,7 +50,7 @@ namespace baby_shop_backend.Controllers
                 var jwt = splitToken[1];
 
                 var result = await _iwhishListRepo.RemoveFromWhisList(jwt, productId);
-                return Ok(result);
+                return Ok(new GenericApiRespones<object>(200,"Ok", result));
 
             }
             catch(Exception ex)
@@ -71,9 +73,9 @@ namespace baby_shop_backend.Controllers
 
             if(result == null)
             {
-                return BadRequest("some error on the WhislistGet");
+                return BadRequest(new GenericApiRespones<object>(400, "some error on the WhislistGet", null));
             }
-            return Ok(result);
+            return Ok(new GenericApiRespones<object>(200,"Ok", result));
 
         }
     }

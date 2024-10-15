@@ -25,22 +25,22 @@ namespace baby_shop_backend.Services.OrderServices
             {
                 var userId = _jwtServices.GetUserId(token);
 
+               
+
                 var user = await _context.User.Include(c => c.cart)
                     .ThenInclude(ci => ci.cartItems)
                     .ThenInclude(p => p.product).FirstOrDefaultAsync(p => p.id == userId);
 
-                if (user == null || user.cart == null || user.cart.cartItems == null )
+                if(user == null || user.cart == null || user.cart.cartItems == null)
                 {
-                    //return false;
-                    throw new Exception("cart is Empty order cannot placed");
-                    
+                    throw new Exception("Cart is empty cannot place order");
                 }
 
                 decimal Total = user.cart.cartItems.Sum(ci => ci.product.price * ci.quantity);
 
                 var order = new Order
                 {
-                    UserId = userId,
+                    UserId = orderdto.UserId,
                     userAddress = orderdto.userAddress,
                     userPhone = orderdto.userPhone,
                     orderDate = orderdto.orderDate,

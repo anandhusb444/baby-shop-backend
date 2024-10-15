@@ -1,4 +1,5 @@
-﻿using baby_shop_backend.Services.CartServices;
+﻿using baby_shop_backend.Respones;
+using baby_shop_backend.Services.CartServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +27,12 @@ namespace baby_shop_backend.Controllers
                 var jwt = token[1];
 
                 var cart = await _cartRepo.GetAllProducts(jwt);
-                return Ok(cart);
+                return Ok(new GenericApiRespones<object>(200, "succefuly Get the cart", cart));
+
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new GenericApiRespones<object>(400, "Internal server error occured", null, ex.Message));
             }
         }
 
@@ -44,12 +46,11 @@ namespace baby_shop_backend.Controllers
                 var jwt = token[1];
 
                 var result = await _cartRepo.AddToCart(jwt, productId);
-                return Ok(result);
+                return Ok(new GenericApiRespones<object>(200, "Added to Cart", result));
             }
             catch(Exception ex)
             {
-
-                return BadRequest(ex.Message);
+                return BadRequest(new GenericApiRespones<object>(400, "Internal server error occuerd", null, ex.Message));
             }
         }
 
@@ -64,11 +65,11 @@ namespace baby_shop_backend.Controllers
                 var result = await _cartRepo.RemoveCart(jwt, ProductId);
                 if(result == false)
                 {
-                    return BadRequest("Item not found");
+                    return BadRequest(new GenericApiRespones<object>(400, "Item Not found", result));
                 }
                 else
                 {
-                    return Ok("Removed from the cart");
+                    return Ok(new GenericApiRespones<object>(200, "Removed from the cart", result));
 
                 }
 
@@ -86,12 +87,13 @@ namespace baby_shop_backend.Controllers
 
             if(result)
             {
-                return Ok("increaseQty");
+                return Ok(new GenericApiRespones<object>(200, "QtyIncrease", result));
+                //return Ok("increaseQty");
 
             }
             else
             {
-                return BadRequest("Item Not Found");
+                return BadRequest(new GenericApiRespones<object>(400, "item Not found", result));
 
             }
         }
@@ -105,14 +107,14 @@ namespace baby_shop_backend.Controllers
             var jwt = token[1];
 
             var result = await _cartRepo.DecreaseQty(jwt, productId);
-
-            if(result == null)
+            
+            if(result)
             {
-                return BadRequest("item not found");
+                return Ok(new GenericApiRespones<object>(200,"QtyDecreased",result));
             }
             else
             {
-                return Ok("DecreaseQty");
+                return BadRequest(new GenericApiRespones<object>(400, "items not Found", null));
             }
         }
 

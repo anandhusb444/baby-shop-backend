@@ -1,6 +1,7 @@
 ﻿using baby_shop_backend.DTO.CategoryDTO;
 using baby_shop_backend.DTO.ProductDTO;
 using baby_shop_backend.Models;
+using baby_shop_backend.Respones;
 using baby_shop_backend.Services.ProductServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,10 +26,12 @@ namespace baby_shop_backend.Controllers
             try
             {
                 var products = await _productRepo.GetAllProducts();
-                return Ok(products);
+                return Ok(new GenericApiRespones<object>(200, "Sucessfully Fetched all the products", products));
+                
             }
             catch(Exception ex)
             {
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
                 return StatusCode(500, ex.Message);
                     
             }
@@ -40,11 +43,13 @@ namespace baby_shop_backend.Controllers
             try
             {
                 var product = await _productRepo.GetProductsById(Id);
-                return Ok(product);
+                return Ok(new GenericApiRespones<object>(200, "Sucessfully fetched by id", product));
+
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                var respones = new GenericApiRespones<object>(500, "Internal Server error", null, ex.Message);
+                return StatusCode(500, respones);
             }
         }
 
@@ -54,11 +59,12 @@ namespace baby_shop_backend.Controllers
             try
             {
                 var product = await _productRepo.GetProductByCat(category);
-                return Ok(product);
+                return Ok(new GenericApiRespones<object>(200, "Ok", product));
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                var respones = new GenericApiRespones<object>(500, "internal server error", null, ex.Message);
+                return StatusCode(500,respones);
             }
         }
 
@@ -68,10 +74,12 @@ namespace baby_shop_backend.Controllers
             try
             {
                 var product = await _productRepo.Search(Name);
-                return Ok(product);
+                return Ok(new GenericApiRespones<object>(200, "Ok", product));
+                
             }
             catch(Exception ex)
             {
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
                 return StatusCode(500, ex.Message);
             }
         }
@@ -85,17 +93,17 @@ namespace baby_shop_backend.Controllers
                 var result = await _productRepo.AddProduct(product, img);
                 if(result)
                 {
-                    return Ok("Producted Added sucessfully");
-
+                    return Ok(new GenericApiRespones<object>(200, "Product as been added", result));
                 }
                 else
                 {
-                    return BadRequest("Producte already exist");
+                    return BadRequest(new GenericApiRespones<object>(400, "product already Been exist", null));
                 }
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                var respones = new GenericApiRespones<object>(500, "Internal Server erro", null, ex.Message);
+                return StatusCode(500, respones);
             }
         }
 
@@ -110,16 +118,18 @@ namespace baby_shop_backend.Controllers
                 var prod = await _productRepo.UpdateProduct(Id, product,image);
                 if(prod)
                 {
-                    return Ok("Updated SuccessFuly");
+                    return Ok(new GenericApiRespones<object>(200, "Update Successfuly", prod));
+                  
                 }
                 else
                 {
-                    return BadRequest("product Not Found");
+                    return BadRequest(new GenericApiRespones<object>(400, "product not found", null));
                 }
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                var respones = new GenericApiRespones<object>(500, "Internal Server error",null, ex.Message);
+                return StatusCode(500, respones);
             }
         }
 
@@ -133,16 +143,19 @@ namespace baby_shop_backend.Controllers
                 var res = await _productRepo.DeleteProduct(Id);
                 if(res != null)
                 {
-                    return Ok("Successfully deleted");
+                    return Ok(new GenericApiRespones<object>(200, "Successfully deleted", res));
+                    
                 }
                 else
                 {
-                    return BadRequest("No product found");
+                    return BadRequest(new GenericApiRespones<object>(400, "No product found", res));
+                    
                 }
             }
             catch(Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                var respones = new GenericApiRespones<object>(500, "Internal server error", null, ex.Message);
+                return StatusCode(500, respones);
             }
         }
 

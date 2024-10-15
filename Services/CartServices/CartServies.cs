@@ -236,7 +236,17 @@ namespace baby_shop_backend.Services.CartServices
                     throw new Exception("User Not Found");
                 }
 
+                if(user.cart == null)
+                {
+                    throw new Exception("User Cart is not found");
+                }
+
+
                 var item = user.cart.cartItems.FirstOrDefault(p => p.productId == productId);
+                if(item == null)
+                {
+                    return false;
+                }
 
                 if (item.quantity <= 1)
                 {

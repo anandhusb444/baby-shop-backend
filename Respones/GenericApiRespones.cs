@@ -6,8 +6,8 @@
         public string Message { get; set; }
         public T Data { get; set; }
         public string Error { get; set; }
-
-        public GenericApiRespones(int statuscode,string msg,T data,string error)
+            
+        public GenericApiRespones(int statuscode,string msg,T data,string error = null)
         {
             StatusCode = statuscode;
             Message = msg;
