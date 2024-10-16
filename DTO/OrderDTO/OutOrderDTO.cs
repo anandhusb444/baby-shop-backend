@@ -6,6 +6,8 @@
         public int productId { get; set; }
         public int quantity { get; set; }
         public string productName { get; set; }
+
+        //public DateTime orderDate { get; set; }
         public decimal total { get; set; }
     }
 }

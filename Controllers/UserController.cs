@@ -40,7 +40,7 @@ namespace baby_shop_backend.Controllers
                 {
 
                     _logger.LogInformation($"{user}");
-                    return NotFound(new GenericApiRespones<object>(400, "User Not found", null));
+                    return NotFound(new GenericApiRespones<object>(400, "User Not found", user));
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace baby_shop_backend.Controllers
                 }
                 else
                 {
-                    return BadRequest(new GenericApiRespones<object>(400, "User already existed",null));
+                    return BadRequest(new GenericApiRespones<object>(400, "User already existed",user));
 
                 }
 
@@ -143,7 +143,7 @@ namespace baby_shop_backend.Controllers
 
         }
         [Authorize(Roles = "Admin")]
-        [HttpPut("block {Id}")]
+        [HttpPut("block{Id}")]
         public async Task<IActionResult> blokeUser(int Id)
         {
             try

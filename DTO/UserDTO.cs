@@ -5,6 +5,9 @@ namespace baby_shop_backend.DTO
     public class UserDTO
     {
         [Required]
+        public int id { get; set; }
+
+        [Required]
         public string userName { get; set; }
         [Required]
         public string userEmail { get; set; }

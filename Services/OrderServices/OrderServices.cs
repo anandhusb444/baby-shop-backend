@@ -43,13 +43,13 @@ namespace baby_shop_backend.Services.OrderServices
                     UserId = orderdto.UserId,
                     userAddress = orderdto.userAddress,
                     userPhone = orderdto.userPhone,
-                    orderDate = orderdto.orderDate,
                     total = Total,
                     orderItems = user.cart.cartItems.Select(ct => new OrderItems
                     {
                         productId = ct.productId,
                         productName = ct.product.title,
                         quantity = ct.quantity,
+                        
                         price = ct.quantity * ct.product.price
                     }).ToList()
 
@@ -87,7 +87,10 @@ namespace baby_shop_backend.Services.OrderServices
                         productId = item.productId,
                         productName = item.productName,
                         quantity = item.quantity,
-                        total = item.price
+                        total = item.price,
+                        
+                        
+
                     }).ToList();
                     return details;
                     
@@ -136,6 +139,7 @@ namespace baby_shop_backend.Services.OrderServices
                                 productName = item.productName,
                                 quantity = item.quantity,
                                 total = item.price * item.quantity,
+                                
                             });
                         }
                         

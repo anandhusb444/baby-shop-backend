@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using baby_shop_backend.Context;
 
@@ -11,9 +12,11 @@ using baby_shop_backend.Context;
 namespace baby_shop_backend.Migrations
 {
     [DbContext(typeof(DbContext_Main))]
-    partial class DbContext_MainModelSnapshot : ModelSnapshot
+    [Migration("20241016125654_create-admin")]
+    partial class createadmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -186,23 +186,23 @@ namespace baby_shop_backend.Services.userServices
             }
         }
 
-        public async Task<bool> DeleteUser(int Id)
-        {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.id == Id);
-
-            if(user != null)
+            public async Task<bool> DeleteUser(int Id)
             {
-                _context.User.Remove(user);
-                await _context.SaveChangesAsync();
-                return true;
+                var user = await _context.User.FirstOrDefaultAsync(u => u.id == Id);
 
-            }
-            else
-            {
-                return false;
+                if(user != null)
+                {
+                    _context.User.Remove(user);
+                    await _context.SaveChangesAsync();
+                    return true;
+
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
-    }
 
    
 }

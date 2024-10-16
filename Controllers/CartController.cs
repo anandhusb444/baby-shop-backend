@@ -27,7 +27,15 @@ namespace baby_shop_backend.Controllers
                 var jwt = token[1];
 
                 var cart = await _cartRepo.GetAllProducts(jwt);
-                return Ok(new GenericApiRespones<object>(200, "succefuly Get the cart", cart));
+                if(cart != null)
+                {
+                    return Ok(new GenericApiRespones<object>(200, "succefuly Get the cart", cart));
+
+                }
+                else
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "Cart is Empty", null));
+                }
 
             }
             catch(Exception ex)
@@ -46,7 +54,15 @@ namespace baby_shop_backend.Controllers
                 var jwt = token[1];
 
                 var result = await _cartRepo.AddToCart(jwt, productId);
-                return Ok(new GenericApiRespones<object>(200, "Added to Cart", result));
+                if (result)
+                {
+                    return Ok(new GenericApiRespones<object>(200, "Added to Cart", result));
+
+                }
+                else
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "Cloud not found user", null));
+                }
             }
             catch(Exception ex)
             {

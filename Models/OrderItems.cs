@@ -20,6 +20,8 @@ namespace baby_shop_backend.Models
 
         [Required]
         public int quantity { get; set; }
+
+        //public DateTime orderDate { get; set; }
         public virtual Products products { get; set; }
         public virtual Order order { get; set; }
     }
