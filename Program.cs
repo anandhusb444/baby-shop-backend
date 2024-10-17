@@ -128,6 +128,9 @@ namespace baby_shop_backend
             }
 
             app.UseCors("ReactPolicy");
+
+            //app.UseStaticFiles();
+
             app.UseHttpsRedirection();
 
             // Enable authentication and authorization middleware.
