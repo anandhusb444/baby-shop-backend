@@ -165,7 +165,7 @@ namespace baby_shop_backend.Services.ProductServices
                     return true;
                 }
 
-                var isCategory = _context.CategoriesTable.AnyAsync(c => c.id == addproduct.categoryId);
+                var isCategory = await _context.CategoriesTable.AnyAsync(c => c.id == addproduct.categoryId);
                 if(isCategory == null)
                 {
                     return false;

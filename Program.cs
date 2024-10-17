@@ -129,7 +129,7 @@ namespace baby_shop_backend
 
             app.UseCors("ReactPolicy");
 
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
