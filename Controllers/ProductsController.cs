@@ -14,10 +14,12 @@ namespace baby_shop_backend.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IproductServices _productRepo;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(IproductServices product)
+        public ProductsController(IproductServices product, ILogger<ProductsController> log)
         {
             _productRepo = product;
+            _logger = log;
         }
 
         [HttpGet ("All Products")]
@@ -97,11 +99,12 @@ namespace baby_shop_backend.Controllers
                 }
                 else
                 {
-                    return BadRequest(new GenericApiRespones<object>(400, "product already Been exist", null));
+                    return BadRequest(new GenericApiRespones<object>(400, "product already Been exist", result));
                 }
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, "Error in addproduct controller:" + ex.InnerException?.Message ?? ex.Message);
                 var respones = new GenericApiRespones<object>(500, "Internal Server erro", null, ex.Message);
                 return StatusCode(500, respones);
             }

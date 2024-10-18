@@ -157,6 +157,7 @@ namespace baby_shop_backend.Services.ProductServices
             try
             {
                 var isExist = await _context.ProductsTable.FirstOrDefaultAsync(p => p.title == addproduct.title);
+                Console.WriteLine(isExist);
                 if(isExist != null)
                 {
                     isExist.quantity += addproduct.quantity;
@@ -165,13 +166,14 @@ namespace baby_shop_backend.Services.ProductServices
                     return true;
                 }
 
-                var isCategory = await _context.CategoriesTable.AnyAsync(c => c.id == addproduct.categoryId);
+                var isCategory = await _context.CategoriesTable.FirstOrDefaultAsync(c => c.id == addproduct.categoryId);
+                Console.WriteLine(isCategory);
                 if(isCategory == null)
                 {
                     return false;
                 }
 
-                var product = _mapper.Map<Products>(addproduct);// add maping to the products
+                var product = _mapper.Map<Products>(addproduct);
 
                 if(image != null)
                 {
@@ -192,8 +194,8 @@ namespace baby_shop_backend.Services.ProductServices
             }
             catch(Exception ex)
             {
-                _loger.LogInformation(ex.Message);
-                throw new Exception(ex.Message);
+                _loger.LogError(ex, "Error in product services method: " + ex.InnerException?.Message ?? ex.Message);
+                throw ;
             }
         }
 
