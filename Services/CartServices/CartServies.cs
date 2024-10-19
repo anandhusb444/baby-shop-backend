@@ -102,8 +102,9 @@ namespace baby_shop_backend.Services.CartServices
                 var checkIsProduct = user.cart.cartItems.FirstOrDefault(v => v.productId == productId);
 
 
-                if(checkIsProduct != null)
+                if (checkIsProduct != null)
                 {
+                    checkIsProduct.quantity += 1;
                     return false;
                 }
                 else

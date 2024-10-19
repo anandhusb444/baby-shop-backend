@@ -8,7 +8,7 @@ namespace baby_shop_backend.Services.ProductServices
         Task<List<ProductViewDTO>> GetAllProducts();
         Task<ProductViewDTO> GetProductsById(int Id);
 
-        Task<List<ProductViewDTO>> GetProductByCat(CategoryDTO category);
+        Task<List<ProductViewDTO>> GetProductByCat(string category);
 
         Task<List<ProductViewDTO>> Search(string Name);
 

@@ -84,11 +84,11 @@ namespace baby_shop_backend.Services.ProductServices
             }
         }
 
-        public async Task<List<ProductViewDTO>> GetProductByCat(CategoryDTO category)
+        public async Task<List<ProductViewDTO>> GetProductByCat(string category)
         {
             try
             {
-                var products = _context.ProductsTable.Include(p => p.category).Where(p => p.category.CategoriesName == category.CategoryName && p.status == true);
+                var products = await _context.ProductsTable.Include(p => p.category).Where(p => p.category.CategoriesName == category && p.status == true).ToListAsync();
 
                 var productN = products.Select(pr => new ProductViewDTO
                 {
@@ -101,15 +101,8 @@ namespace baby_shop_backend.Services.ProductServices
                     quantity = pr.quantity
 
                 }).ToList();
-                
-                if(productN.Count > 0)
-                {
-                    return productN;
-                }
-                else
-                {
-                    return new List<ProductViewDTO>();
-                }
+
+                return productN;
             }
             catch(Exception ex)
             {
@@ -136,14 +129,7 @@ namespace baby_shop_backend.Services.ProductServices
 
                 }).ToList();
 
-                if(productN.Count > 0)
-                {
-                    return productN;
-                }
-                else
-                {
-                    return new List<ProductViewDTO>();
-                }
+                return productN;
             }
             catch (Exception ex)
             {

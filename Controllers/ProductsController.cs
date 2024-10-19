@@ -55,16 +55,21 @@ namespace baby_shop_backend.Controllers
             }
         }
 
-        [HttpPost("productByCategory")]
-        public async Task<IActionResult> GetByCategory(CategoryDTO category)
+      [HttpGet("{category}")]
+        public async Task<IActionResult> GetByCategory(string category)
         {
             try
             {
+                _logger.LogInformation($"this is from controller ;{category}");
                 var product = await _productRepo.GetProductByCat(category);
+                if(product.Count == 0)
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "bad request",product));
+                }
                 return Ok(new GenericApiRespones<object>(200, "Ok", product));
             }
             catch(Exception ex)
-            {
+            {  
                 var respones = new GenericApiRespones<object>(500, "internal server error", null, ex.Message);
                 return StatusCode(500,respones);
             }
