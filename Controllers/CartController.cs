@@ -54,14 +54,23 @@ namespace baby_shop_backend.Controllers
                 var jwt = token[1];
 
                 var result = await _cartRepo.AddToCart(jwt, productId);
-                if (result)
+                if (result == "CannotFindUser")
                 {
-                    return Ok(new GenericApiRespones<object>(200, "Added to Cart", result));
+                    return NotFound(new GenericApiRespones<object>(404, "can't find user", result));
 
+                }
+                else if(result == "ProductNotFound")
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "can't find produc", null));
+                }
+                else if(result == "OutOfStock" || result == "ExitInTheCart")
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "Product is out of stock", result));
                 }
                 else
                 {
-                    return BadRequest(new GenericApiRespones<object>(400, "Cloud not found user", null));
+                    return Ok(new GenericApiRespones<object>(200, "Added to Cart", result));
+
                 }
             }
             catch(Exception ex)

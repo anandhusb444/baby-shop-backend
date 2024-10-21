@@ -67,7 +67,7 @@ namespace baby_shop_backend.Services.CartServices
             
         }
 
-        public async Task<bool> AddToCart(string token, int productId)
+        public async Task<string> AddToCart(string token, int productId)
         {
             try
             {
@@ -79,18 +79,18 @@ namespace baby_shop_backend.Services.CartServices
 
                 if(user == null)
                 {
-                    return false;
+                    return "CannotFindUser";
                 }
 
                 var product = await _context.ProductsTable.FirstOrDefaultAsync(p => p.id == productId);
                 if(product == null)
                 {
-                    return false;
+                    return "ProductNotFound";
                 }
 
                 if(product.quantity <= 0 )
                 {
-                    return false;
+                    return "OutOfStock";
                 }
 
                 if(user.cart == null)
@@ -105,7 +105,7 @@ namespace baby_shop_backend.Services.CartServices
                 if (checkIsProduct != null)
                 {
                     checkIsProduct.quantity += 1;
-                    return false;
+                    return "ExitInTheCart";
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace baby_shop_backend.Services.CartServices
                     product.quantity -= 1;
                     user.cart.cartItems.Add(cartItem);
                     await _context.SaveChangesAsync();
-                    return true;
+                    return "Done";
 
                 }
             }

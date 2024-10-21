@@ -48,6 +48,25 @@ namespace baby_shop_backend.Controllers
             
         }
 
+        [HttpPost("Payment")]
+        [Authorize]
+        public IActionResult Payment(PaymentDTO razorpay)
+        {
+            try
+            {
+                if(razorpay == null)
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "Razorpay not be null here", null));
+                }
+                var con = _ordetRepo.Payment(razorpay);
+                return Ok(new GenericApiRespones<object>(200, "Ok", con));
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500,ex.Message);
+            }
+        }
+
         [HttpGet("GetOrder")]
         [Authorize]
         public async Task<IActionResult> GetOrder()

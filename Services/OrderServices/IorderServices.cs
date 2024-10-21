@@ -14,5 +14,7 @@ namespace baby_shop_backend.Services.OrderServices
 
         Task<int> TotalPurchase();
 
+        bool Payment(PaymentDTO razorpay);
+
     }
 }

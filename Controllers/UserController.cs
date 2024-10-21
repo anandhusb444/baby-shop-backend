@@ -58,8 +58,9 @@ namespace baby_shop_backend.Controllers
 
         }
 
-        [Authorize (Roles = "Admin")]
+  
         [HttpGet("{Id}")]
+        [Authorize]
 
         public async Task<IActionResult> GetUserId(int Id)
         {

@@ -50,7 +50,15 @@ namespace baby_shop_backend.Controllers
                 var jwt = splitToken[1];
 
                 var result = await _iwhishListRepo.RemoveFromWhisList(jwt, productId);
-                return Ok(new GenericApiRespones<object>(200,"Ok", result));
+                if (result)
+                {
+                    return Ok(new GenericApiRespones<object>(200, "Ok", result));
+
+                }
+                else
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "CanRemoveWishList", result));
+                }
 
             }
             catch(Exception ex)

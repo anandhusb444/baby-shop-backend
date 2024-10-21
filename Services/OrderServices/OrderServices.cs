@@ -5,6 +5,8 @@ using baby_shop_backend.Services.JwtServies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Reflection.Metadata.Ecma335;
+using Razorpay.Api;
+
 
 namespace baby_shop_backend.Services.OrderServices
 {
@@ -12,13 +14,41 @@ namespace baby_shop_backend.Services.OrderServices
     {
         private readonly DbContext_Main _context;
         private readonly I_jwtServices _jwtServices;
+        private readonly IConfiguration _configurtion;
 
-        public OrderServices(DbContext_Main ctx, I_jwtServices services)
+        public OrderServices(DbContext_Main ctx, I_jwtServices services,IConfiguration _config)
         {
             _context = ctx;
             _jwtServices = services;
+            _configurtion = _config;
         }
 
+
+        public bool Payment(PaymentDTO razorpay)
+        {
+            if (razorpay == null || string.IsNullOrEmpty(razorpay.razorpay_paymeny_id) || string.IsNullOrEmpty(razorpay.razorpay_order_id) || string.IsNullOrEmpty(razorpay.razorpay_signature))
+            {
+                return false;
+            }
+
+            try
+            {
+                RazorpayClient client = new RazorpayClient(_configurtion["Razorpay:KeyId"], _configurtion["Razorpay:KeySecret"]);
+                Dictionary<string, string> attribute = new Dictionary<string, string>();
+                attribute.Add("razorpay_payment_id", razorpay.razorpay_paymeny_id);
+                attribute.Add("razorpay_order_id", razorpay.razorpay_order_id);
+                attribute.Add("razorpay_signature", razorpay.razorpay_signature);
+
+                Utils.verifyPaymentSignature(attribute);
+
+                return true;
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Payment Verification Failed" + ex.Message);
+            }
+        }
         public async Task<bool> OrderCreated(string token,OrderDTO orderdto)
         {
             try
@@ -38,7 +68,8 @@ namespace baby_shop_backend.Services.OrderServices
 
                 decimal Total = user.cart.cartItems.Sum(ci => ci.product.price * ci.quantity);
 
-                var order = new Order
+                baby_shop_backend.Models.Order order = new baby_shop_backend.Models.Order
+
                 {
                     UserId = orderdto.UserId,
                     userAddress = orderdto.userAddress,
@@ -178,5 +209,6 @@ namespace baby_shop_backend.Services.OrderServices
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }
