@@ -63,9 +63,13 @@ namespace baby_shop_backend.Controllers
                 {
                     return BadRequest(new GenericApiRespones<object>(400, "can't find produc", null));
                 }
-                else if(result == "OutOfStock" || result == "ExitInTheCart")
+                else if(result == "OutOfStock")
                 {
                     return BadRequest(new GenericApiRespones<object>(400, "Product is out of stock", result));
+                }
+                else if(result == "ExitInTheCart")
+                {
+                    return BadRequest(new GenericApiRespones<object>(400, "ExitInTheCart", null));
                 }
                 else
                 {

@@ -22,7 +22,7 @@ namespace baby_shop_backend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            
             builder.Services.AddControllers();
 
             
@@ -42,7 +42,7 @@ namespace baby_shop_backend
             builder.Services.AddScoped<IwhishList, WhishListServices>();
 
 
-            // Configure DbContext with SQL Server.
+            
             builder.Services.AddDbContext<DbContext_Main>(x =>
                 x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
