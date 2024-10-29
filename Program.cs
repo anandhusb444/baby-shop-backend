@@ -78,6 +78,7 @@ namespace baby_shop_backend
             });
 
             //--------------------Authentication & Token-----------------------------
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

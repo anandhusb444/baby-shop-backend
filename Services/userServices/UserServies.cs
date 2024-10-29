@@ -28,7 +28,7 @@ namespace baby_shop_backend.Services.userServices
             _logger = loger;
         }
 
-        public async Task<List<UserDTO>> GetAllUsers()
+        public async Task<IEnumerable<UserDTO>> GetAllUsers()
         {
             try
             {

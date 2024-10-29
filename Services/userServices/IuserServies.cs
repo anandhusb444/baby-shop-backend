@@ -5,7 +5,7 @@ namespace baby_shop_backend.Services.userServices
 {
     public interface  IuserServies
     {
-        Task<List<UserDTO>> GetAllUsers();
+        Task<IEnumerable<UserDTO>> GetAllUsers();
 
         Task<UserDTO> GetUserById(int Id);
 
